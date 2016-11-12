@@ -1,0 +1,16 @@
+{
+    "week": 10,
+    "sourcePath": "./tests/src",
+    "targetPath": "./tests/target",
+    "backupPath": "./tests/backup",
+    "games": [
+        {
+            "grade": "6A",
+            "name": "Test vs Test"
+        },
+        {
+            "grade": "8A",
+            "name": "Test2 vs Test3"
+        }
+    ]
+}
