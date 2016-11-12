@@ -6,8 +6,10 @@ import (
     "flag"
     "encoding/json"
     "io/ioutil"
+)
 
-    "github.com/plloyd241/sideliner/game"
+var (
+    backup bool
 )
 
 type Config struct {
@@ -16,6 +18,11 @@ type Config struct {
     targetPath  string
     backupPath  string
     games       []Game
+}
+
+type Game struct {
+    grade string
+    teams string
 }
 
 func getConfig() jsonobject {
@@ -33,8 +40,7 @@ func main() {
 
     fmt.Printf("Results: %v\n", config)
 
-    doBackup := flag.Bool("backup", true, "Choose whether to copy files to backup path")
-    name := flag.String("name", "test", "Enter your name")
+    backup := flag.Bool("backup", true, "Choose whether to copy files to backup path")
     flag.Parse()
 
     fmt.Println("Hello,", flagVal);
