@@ -3,10 +3,10 @@ package main
 import (
     "os"
     "fmt"
-    "errors"
     "flag"
+    "path/filepath"
     "encoding/json"
-    "io/ioutil"
+    "io"
 )
 
 var (
@@ -15,6 +15,8 @@ var (
     pips    int
 )
 
+// Config struct
+// Holds all of our settings and the games
 type Config struct {
     SourcePath  string
     TargetPath  string
@@ -23,11 +25,23 @@ type Config struct {
     Games       []Game
 }
 
+// Game struct
+// Holds game info and the plays
 type Game struct {
     Grade string
     Title string
+    Plays []Play
 }
 
+// Play struct
+// Holds info about each play
+type Play struct {
+    Name string
+    Path string
+    Size int
+}
+
+// gets config from json file
 func getConfig() Config {
     file, e := ioutil.ReadFile("./config.json")
 
@@ -42,22 +56,50 @@ func getConfig() Config {
     return c
 }
 
-func makeTargetDirs() error {
+// makes directories for games
+func makeTargetDirs() {
     if len(config.Games) == 0 {
-        return errors.New("No games found in config")
+        fmt.Println("No games found in config")
     }
 
     for i := range config.Games {
         game := config.Games[i]
+        name := game.Grade + " - " + game.Title
 
-        fmt.Printf("%s - %s\n", game.Grade, game.Title)
+        e := os.Mkdir(config.TargetPath + string(filepath.Separator) + name, 0777)
+
+        if e == nil {
+            fmt.Println(name)
+        } else {
+            fmt.Println(e)
+        }
+
     }
-
-    return nil
 }
 
-func copyPlays() error {
-    return nil
+// does something maybe
+func copyPlays() {
+
+}
+
+// copies file from source to destination
+func copyPlay(src, dst string) error {
+    srcFile, err := os.Open(src)
+    if err != nil { return err }
+
+    defer srcFile.Close()
+
+    desFile, err := os.Create(dst)
+    if err != nil { return err }
+
+    defer dstFile.Close()
+
+    _, err = io.Copy(dstFile, srcFile)
+    copyErr := dstFile.Close()
+
+    if err != nil { return err }
+
+    return copyErr
 }
 
 func main() {
@@ -66,13 +108,6 @@ func main() {
 
     config = getConfig()
 
-    dirErr := makeTargetDirs();
-    if dirErr != nil {
-        fmt.Printf("Error creating directories: %v\n", dirErr)
-    }
-
-    copyErr := copyPlays();
-    if copyErr != nil {
-        fmt.Printf("Error copying files: %v\n", copyErr)
-    }
+    makeTargetDirs()
+    copyPlays()
 }

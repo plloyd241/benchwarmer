@@ -1,8 +1,8 @@
 {
     "week": 10,
-    "sourcePath": "./tests/src",
-    "targetPath": "./tests/target",
-    "backupPath": "./tests/backup",
+    "sourcePath": "./example/src",
+    "targetPath": "./example/target",
+    "backupPath": "./example/backup",
     "games": [
         {
             "grade": "6A",
